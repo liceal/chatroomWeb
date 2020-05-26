@@ -49,9 +49,9 @@ export default {
      * https://chatroom999.herokuapp.com/
      * https://chatroom999.herokuapp.com/
      * https://chatroom-nodejs-socket.herokuapp.com/
+     * https://liceal-chatroom-serve.herokuapp.com/
      */
-    ws = new WebSocket("wss://chatroom-nodejs-socket.herokuapp.com/");
-    //组合键监听
+    ws = new WebSocket("wss://liceal-chatroom-serve.herokuapp.com/");
   },
 
   mounted() {
@@ -82,7 +82,7 @@ export default {
         // console.log(data.res);
         data.res.msg = data.res.msg.replace(/↵/g, "\n");
         this.msgs.push(data.res);
-
+        //渲染聊天界面
         this.$nextTick(() => {
           this.$refs.msgs.scrollTop = this.$refs.msgs.scrollHeight;
         });
