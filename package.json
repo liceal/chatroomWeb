@@ -8,6 +8,7 @@
         "build": "vue-cli-service build"
     },
     "dependencies": {
+        "express": "^4.17.1",
         "core-js": "^3.6.4",
         "less-loader": "^6.1.0",
         "nodejs-websocket": "^1.7.2",
