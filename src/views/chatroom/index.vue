@@ -46,12 +46,13 @@ export default {
   created() {
     /**
      * ws://localhost:666
-     * https://chatroom999.herokuapp.com/
-     * https://chatroom999.herokuapp.com/
-     * https://chatroom-nodejs-socket.herokuapp.com/
-     * https://liceal-chatroom-serve.herokuapp.com/
+     * wss://chatroom999.herokuapp.com/
+     * wss://chatroom999.herokuapp.com/
+     * wss://chatroom-nodejs-socket.herokuapp.com/
+     * wss://liceal-chatroom-serve.herokuapp.com/
      */
-    ws = new WebSocket("wss://liceal-chatroom-serve.herokuapp.com/");
+    ws = new WebSocket("ws://localhost:666");
+    this.Heartbeat();
   },
 
   mounted() {
@@ -86,10 +87,19 @@ export default {
         this.$nextTick(() => {
           this.$refs.msgs.scrollTop = this.$refs.msgs.scrollHeight;
         });
+      }else if(data.code == 300){
+        //心跳
+        console.log("心跳，扑通");
+        
       }
     };
 
-    ws.onclose = () => {
+    ws.onclose = e => {
+      console.log(
+        "websocket 断开: " + e.code + " " + e.reason + " " + e.wasClean
+      );
+      console.log(e);
+
       alert("连接已经关闭");
       console.log("连接已经关闭");
     };
@@ -103,11 +113,30 @@ export default {
         this.msg !== ""
       ) {
         //只能发送字符串，不能发送object
-        ws.send(this.msg);
+        let data = {
+          type: "text",
+          msg: this.msg
+        };
+        data = JSON.stringify(data);
+        ws.send(data);
         this.msg = "";
       }
+    },
+    Heartbeat() {
+      //心跳
+      let data = {
+        type: "state",
+        msg: null
+      };
+      data = JSON.stringify(data)
+      setInterval(() => {
+        ws.send(data);
+      }, 30000);
     }
   }
+};
+window.onbeforeunload = function() {
+  ws.close();
 };
 </script><style lang="less"scoped>
 @import url("./css.less");
